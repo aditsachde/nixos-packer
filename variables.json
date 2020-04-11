@@ -1,0 +1,12 @@
+{
+    "vcenter_server":"vsphereserver",
+    "username":"vsphereusername",
+    "password":"vspherepassword",
+    "insecure_connection": "true",
+    "datastore":"vspheredatastore",
+    "folder": "template",
+    "host":"esxihost",
+    "network": "vspherenetwork",
+    "ssh_username": "packer",
+    "ssh_key": "path/to/ssh/key"
+}
