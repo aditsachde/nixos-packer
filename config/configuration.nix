@@ -54,4 +54,80 @@
   
   system.stateVersion = "19.09"; # Do not change
 
+
+  networking.firewall = {
+    allowedTCPPorts = [ 80 443];
+  };
+
+
+  services.nginx = {
+    enable = true;
+    virtualHosts = {
+      ## virtual host for Syapse
+      "matrix.dangerousdemos.net" = {
+        ## for force redirecting HTTP to HTTPS
+        forceSSL = true;
+        ## this setting takes care of all LetsEncrypt business
+        enableACME = true;
+        locations."/" = {
+          proxyPass = "http://localhost:8008";
+        };
+      };
+    };
+ 
+    ## other nginx specific best practices
+    recommendedGzipSettings = true;
+    recommendedOptimisation = true;
+    recommendedTlsSettings = true;
+  };
+
+  services.matrix-synapse = {
+    enable = true;
+
+    ## domain for the Matrix IDs
+    server_name = "dangerousdemos.net";
+
+    ## enable metrics collection
+    enable_metrics = true;
+
+    ## enable user registration
+    enable_registration = true;
+
+    ## Synapse guys recommend to use PostgreSQL over SQLite
+    database_type = "psycopg2";
+
+    ## database setup clarified later
+    database_args = {
+      password = "synapse";
+    };
+
+    ## default http listener which nginx will passthrough to
+    listeners = [
+      {
+        port = 8008;
+        tls = false;
+        resources = [
+          {
+            compress = true;
+            names = ["client" "webclient" "federation"];
+          }
+        ];
+      }
+    ];
+  };
+
+  services.postgresql = {
+    enable = true;
+
+    ## postgresql user and db name remains in the
+    ## service.matrix-synapse.database_args setting which
+    ## by default is matrix-synapse
+    initialScript = pkgs.writeText "synapse-init.sql" ''
+        CREATE ROLE "matrix-synapse" WITH LOGIN PASSWORD 'synapse';
+        CREATE DATABASE "matrix-synapse" WITH OWNER "matrix-synapse"
+            TEMPLATE template0
+            LC_COLLATE = "C"
+            LC_CTYPE = "C";
+        '';
+  };
 }
