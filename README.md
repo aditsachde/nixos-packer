@@ -1,4 +1,6 @@
-# NixOS Packer Template
+The synapse portion was blatantly taken from Kaushik Chakraborty's very good tutorial https://kaushikc.org/posts/matrix-jitsi-nixos.html
+
+### NixOS Packer Template
 
 The configuration.nix works with the paritioning laid out in the packer build command. Adds a passwordless sudo user that can later be used by nixops to actually deploy the desired nixos config. The image should also automatically resize the root partition to match any disk size. 
 
