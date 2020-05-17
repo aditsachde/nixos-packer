@@ -24,8 +24,8 @@
         "ssh_username": "{{user `ssh_username`}}",
         "ssh_private_key_file": "{{user `ssh_key`}}",
   
-        "CPUs": 1,
-        "RAM": 1024,
+        "CPUs": 4,
+        "RAM": 2048,
         "RAM_reserve_all": false,
   
         "disk_controller_type":  "pvscsi",
@@ -34,12 +34,12 @@
   
         "network_card": "vmxnet3",
   
-        "iso_paths": "[ssd] nixos-graphical-19.09.2370.e10c65cdb35-x86_64-linux.iso",
-        "iso_checksum": "7e851697bcdf4a8e8581878ff642d74f00c42d0af8c459fdf0cd20d30464aeb1",
+        "iso_paths": "[ssd] nixos-minimal-20.03.1782.210d8624ac4-x86_64-linux.iso",
+        "iso_checksum": "576fb7cc5d10e76dc4eff3e65c2da7f41dcd9b01590872b085a1bd5f7d9cd5a9",
         "iso_checksum_type": "sha256",
 
         "http_directory": "config",
-        "shutdown_command": "sudo shutdown now",
+        "shutdown_command": "sudo rm -r /var/lib/zerotier-one/ && sudo shutdown now",
 
         "boot_command": [
           "sudo su<enter><wait>",
