@@ -9,6 +9,7 @@
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
   boot.growPartition = true;
+  nix.maxJobs = "auto";
 
   fileSystems."/" =
     { device = "/dev/disk/by-label/nixos";
@@ -35,11 +36,11 @@
   virtualisation.vmware.guest.headless = true;
 
   environment.systemPackages = with pkgs; [
-     git
+     git jq
    ];
 
   users.mutableUsers = false;
-  users.users.packer = {
+  users.users.deploy = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     openssh.authorizedKeys.keys =
@@ -48,10 +49,15 @@
 
   security.sudo.enable = true;
   security.sudo.wheelNeedsPassword = false;
+  nix.trustedUsers = [ "root" "deploy" ];
 
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
   
-  system.stateVersion = "19.09"; # Do not change
+  nixpkgs.config.allowUnfree = true;
+  services.zerotierone.enable = true;
+  services.zerotierone.joinNetworks = [ "network id" ];
+
+  system.stateVersion = "20.03"; # Do not change
 
 }
